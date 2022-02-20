@@ -1,8 +1,9 @@
+import { getFeaturedEvents } from "../eventsData"
+import EventsList from "../components/events/EventsList"
 const Home = () => {
+  const events = getFeaturedEvents()
   return (
-    <h1>
-      Hello from Home
-    </h1>
+    <EventsList events={events} />
   )
 }
 
