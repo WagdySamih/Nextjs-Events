@@ -7,7 +7,7 @@ const EventsSearch = ({ onSearch }) => {
   const yearInputRef = useRef()
   const monthInputRef = useRef()
 
-  const years = [2020, 2021, 2020];
+  const years = [2020, 2021, 2022];
   const months = [
     { name: "January", val: 1 },
     { name: "February", val: 2 },
