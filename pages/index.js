@@ -1,10 +1,16 @@
-import { getFeaturedEvents } from "../eventsData"
+import { getFeaturedEvents } from "../helpers/restClient"
 import EventsList from "../components/events/EventsList"
-const Home = () => {
-  const events = getFeaturedEvents()
+const Home = ({ events }) => {
   return (
     <EventsList events={events} />
   )
 }
 
+export const getStaticProps = async () => {
+  return {
+    props: {
+      events: await getFeaturedEvents()
+    }
+  }
+}
 export default Home
