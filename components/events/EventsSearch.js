@@ -36,13 +36,15 @@ const EventsSearch = ({ onSearch }) => {
         <div className={classes.control}>
           <label>Year: </label>
           <select ref={yearInputRef}>
-            {years.map((year) => <option value={year}>{year}</option>)}
+            {years.map((year) => <option key={year} value={year}>{year}</option>)}
           </select>
         </div>
         <div className={classes.control}>
           <label>Month: </label>
           <select ref={monthInputRef}>
-            {months.map((month) => <option value={month.val}>{month.name}</option>)}
+            {months.map((month) => (
+              <option key={month.val} value={month.val}>{month.name}</option>)
+            )}
           </select>
         </div>
       </div>
