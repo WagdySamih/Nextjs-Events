@@ -12,7 +12,7 @@ export const getAllEvents = async () => {
         ...data[key]
       })
     }
-    
+
     return events
   } catch (error) {
     console.error(error)
@@ -24,4 +24,11 @@ export const getFeaturedEvents = async () => {
   const featuredEvents = allEvents.filter((event) => event.isFeatured)
 
   return featuredEvents
+}
+
+export const getEventById = async (id) => {
+  const allEvents = await getAllEvents();
+  const event = allEvents.find((event) => event.id == id)
+
+  return event
 }
