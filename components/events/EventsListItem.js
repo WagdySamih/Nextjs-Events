@@ -23,7 +23,7 @@ const EventsListItem = ({ event }) => {
     year: 'numeric'
   })
   const prettyAddress = location.replace(',', '\n')
-  const link = `events/${id}`
+  const link = `/events/${id}`
   return (
     <li className={classes.item}>
       <img src={image} alt={title} ></img>
