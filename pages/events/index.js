@@ -1,7 +1,10 @@
+
+import { useRouter } from "next/router"
 import EventsList from "../../components/events/EventsList"
 import EventsSearch from "../../components/events/EventsSearch"
 import { getAllEvents } from '../../helpers/restClient'
 const Events = ({ events }) => {
+  const router = useRouter()
   const searchHandler = (year, month) => {
     const path = `/events/${year}/${month}`
     router.push(path)
