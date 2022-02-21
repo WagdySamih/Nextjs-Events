@@ -1,24 +1,16 @@
 
-import { useRouter } from "next/router"
-import { getFilteredEvents } from '../../eventsData'
+import { getFilteredEvents } from '../../helpers/restClient'
 
 import ResultsTitle from "../../components/events/ResultsTitle"
 import EventsList from "../../components/events/EventsList"
 import Button from "../../components/ui/Button"
 import ErrorAlert from '../../components/ui/ErrorAlert'
-const FilteredEventsPage = () => {
-  const router = useRouter();
 
-  const params = router.query.slug
-  if (!params || !params.length)
-    return <p>Loading...</p>
+const FilteredEventsPage = ({ events, hasError, date, loading = true }) => {
+  if (loading)
+    return <div className="center">Loading...</div>
 
-  const year = +params[0];
-  const month = +params[1]
-  const isYearValid = (year) => !isNaN(year) && year > 2000 && year < 2030;
-  const isMonthValid = (month) => !isNaN(month) && month <= 12 && month >= 1;
-
-  if (!isMonthValid(month) || !isYearValid(year)) {
+  if (hasError) {
     return (
       <div className="center">
         <ErrorAlert>
@@ -28,8 +20,6 @@ const FilteredEventsPage = () => {
       </div>
     )
   }
-
-  const events = getFilteredEvents({ year, month })
 
   if (!events || !events.length)
     return (
@@ -43,9 +33,39 @@ const FilteredEventsPage = () => {
 
 
   return <>
-    <ResultsTitle date={`${year}-${month - 1}`} />
+    <ResultsTitle date={`${date.year}-${date.month - 1}`} />
     <EventsList events={events} />
   </>
+}
+
+
+export const getServerSideProps = async (context) => {
+  let [year, month] = context.params.slug;
+  year = +year;
+  month = +month;
+  const isYearValid = (year) => !isNaN(year) && year > 2000 && year < 2030;
+  const isMonthValid = (month) => !isNaN(month) && month <= 12 && month >= 1;
+
+  if (!isMonthValid(month) || !isYearValid(year)) {
+    return {
+      props: {
+        hasError: true,
+        loading: false
+      }
+    }
+  }
+
+  const events = await getFilteredEvents({ year, month })
+
+  return {
+    props: {
+      events,
+      date: {
+        year, month
+      },
+      loading: false
+    }
+  }
 }
 
 export default FilteredEventsPage
