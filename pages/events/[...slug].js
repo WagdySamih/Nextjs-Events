@@ -5,7 +5,7 @@ import ResultsTitle from "../../components/events/ResultsTitle"
 import EventsList from "../../components/events/EventsList"
 import Button from "../../components/ui/Button"
 import ErrorAlert from '../../components/ui/ErrorAlert'
-
+import Meta from "../../components/shared/Meta"
 const FilteredEventsPage = ({ events, hasError, date, loading = true }) => {
   if (loading)
     return <div className="center">Loading...</div>
@@ -33,6 +33,7 @@ const FilteredEventsPage = ({ events, hasError, date, loading = true }) => {
 
 
   return <>
+    <Meta title={"Filtered Events"} description={`events on ${date.year}/${date.month}`} />
     <ResultsTitle date={`${date.year}-${date.month - 1}`} />
     <EventsList events={events} />
   </>

@@ -1,3 +1,4 @@
+import Meta from "../../components/shared/Meta"
 
 import EventSummary from '../../components/event-detail/EventSummary'
 import EventContent from '../../components/event-detail/EventContent'
@@ -9,6 +10,7 @@ const EventDetailPage = ({ event }) => {
   if (!event) return <div className='center'> Loading...</div>
   return (
     <>
+      <Meta title={event.title} description={event.description} />
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
