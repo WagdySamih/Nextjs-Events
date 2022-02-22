@@ -29,7 +29,7 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
-      event
+      event: event || null
     },
     revalidate: 30,
   }
