@@ -1,8 +1,12 @@
 import { getFeaturedEvents } from "../helpers/restClient"
 import EventsList from "../components/events/EventsList"
+import Registration from "../components/input/Registration"
 const Home = ({ events }) => {
   return (
-    <EventsList events={events} />
+    <>
+      <Registration />
+      <EventsList events={events} />
+    </>
   )
 }
 
