@@ -1,19 +1,28 @@
-const handler = (req, res) => {
-  // const { eventId } = req.params
+import { connect, close } from "../../../helpers/database"
+
+const handler = async (req, res) => {
+  const { eventId } = req.query
   switch (req.method) {
     case "GET":
-      res.status(200).json({
-        message: "retrieved successfully!",
-        comments: [{
-          id: "c1",
-          author: "wagdy samih",
-          text: "this is my 1st email"
-        }, {
-          id: "c2",
-          author: "Mariam",
-          text: "this is my 2st email"
-        }]
-      })
+      try {
+        const client = await connect();
+        const db = client.db();
+        const comments = await db.collection("comments")
+          .find({ eventId })
+          .sort({ _id: -1 })
+          .toArray()
+        await close(client)
+
+        return res.status(200).json({
+          message: "comments retrieved successfully!",
+          comments
+        })
+      } catch (error) {
+        return res.status(500).send({
+          message: "error retrieving comments",
+          error
+        })
+      }
 
 
     case "POST":
@@ -23,25 +32,35 @@ const handler = (req, res) => {
         const isValidName = name.trim() != ""
         const isValidText = text.trim() != ""
         if (!isValidEmail) {
-          res.status(422).json({ message: "please enter valid email" })
+          return res.status(422).json({ message: "please enter valid email" })
         }
         if (!isValidName) {
-          res.status(422).json({ message: "please enter valid name" })
+          return res.status(422).json({ message: "please enter valid name" })
         }
         if (!isValidText) {
-          res.status(422).json({ message: "please enter valid comment text" })
+          return res.status(422).json({ message: "please enter valid comment text" })
         }
 
         const comment = {
-          id: new Date().toISOString(),
+          eventId,
           name,
           email,
           text
         }
-        res.status(201).send({ message: "comment is created successfully", comment })
+
+        const client = await connect();
+        const db = client.db()
+        const newComment = await db.collection("comments").insertOne(comment)
+        await close(client)
+
+        res.status(201).send({
+          message: "comment is created successfully",
+          comment: newComment
+        })
 
       } catch (error) {
-        res.status(500).send({ message: "something went wrong", error })
+        console.log({ error })
+        res.status(500).send({ message: "error creating new comment", error })
       }
     default:
       break;
