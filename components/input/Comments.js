@@ -13,8 +13,16 @@ const Comments = (props) => {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  const addCommentHandler = (commentData) => {
+  const addCommentHandler = async (commentData) => {
     // send data to API
+    const res = await fetch(`/api/comments/${eventId}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json",
+      },
+      body: JSON.stringify(commentData)
+    })
+    const payload = await res.json();
   }
 
   return (
@@ -23,7 +31,7 @@ const Comments = (props) => {
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <CommentList eventId={eventId} />}
     </section>
   );
 }

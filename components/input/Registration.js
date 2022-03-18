@@ -1,12 +1,24 @@
+import { useRef } from 'react';
 import classes from './Registration.module.css';
 
 const Registration = () => {
-  const registrationHandler = (event) => {
-    event.preventDefault();
 
-    // fetch user input (state or refs)
-    // optional: validate input
-    // send valid data to API
+  const emailInputRef = useRef()
+
+  const registrationHandler = async (event) => {
+    event.preventDefault();
+    const email = emailInputRef.current.value
+
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email }),
+    })
+    const payload = await res.json()
+
   }
 
   return (
@@ -15,6 +27,7 @@ const Registration = () => {
       <form onSubmit={registrationHandler}>
         <div className={classes.control}>
           <input
+            ref={emailInputRef}
             type='email'
             id='email'
             placeholder='Your email'
